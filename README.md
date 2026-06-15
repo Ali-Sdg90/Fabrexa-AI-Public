@@ -1,135 +1,141 @@
-# Fabrexa AI - Telegram Bot
+# Fabrexa AI
 
-Fabrexa AI is a Telegram bot that runs fully locally through Ollama. It supports personality prompts, conversation logs, owner-only access, and smart long-term memory.
+A sophisticated Telegram bot powered by local Ollama models with advanced memory management, personality system, and streaming responses.
 
 ## Features
 
-- Local AI responses through Ollama `/api/chat`
-- Model selection from `.env`
-- Personality prompts from `personalities/*.txt`
-- Owner-only Telegram access
-- Smart memory stored in local JSON files
-- No hosted AI API key required
+- **Local AI Models**: Fully self-hosted using Ollama - no cloud dependencies or API costs
+- **Personality System**: Multiple configurable AI personalities with persistent system prompts
+- **Smart Memory Management**: Intelligent conversation history with summarization and analysis
+- **Real-time Streaming**: Live message updates as AI generates responses
+- **Access Control**: Private mode (owner-only) or public deployment
+- **Customizable Parameters**: Fine-tune model behavior (temperature, context window, token limits)
+- **Automated Memory Optimization**: Scheduled background processing for memory efficiency
 
-## Prerequisites
+## Quick Start
 
-- Node.js 18+
-- npm
-- Ollama installed and running
-- Telegram bot token from [@BotFather](https://t.me/botfather)
+### Prerequisites
 
-Pull the model you want to use:
+- **Node.js** 18.0.0 or higher
+- **Ollama** installed and running locally
+- A Telegram bot token from [BotFather](https://t.me/botfather)
 
-```bash
-ollama pull llama3.1
-```
+### Installation
 
-## Installation
+1. **Clone the repository**
 
-```bash
-npm install
-copy .env.example .env
-```
+    ```bash
+    git clone https://github.com/yourusername/Fabrexa-AI-Public.git
+    cd Fabrexa-AI-Public
+    ```
 
-On Linux/macOS:
+2. **Install dependencies**
 
-```bash
-cp .env.example .env
-```
+    ```bash
+    npm install
+    ```
 
-Edit `.env`:
+3. **Verify setup**
 
-```env
-TELEGRAM_BOT_TOKEN=your_telegram_bot_token_here
-OWNER_ID=123456789
-OLLAMA_BASE_URL=http://127.0.0.1:11434
-OLLAMA_MODEL=llama3.1
-```
+    ```bash
+    npm run check
+    ```
 
-`OLLAMA_MODEL` is the model shown in Telegram while the bot is processing. `AI_MODEL` and `MODEL` are also accepted as fallback aliases.
+4. **Configure environment**
 
-## Run
+    ```bash
+    cp .env.example .env
+    nano .env  # or your preferred editor
+    ```
 
-Start Ollama first:
-
-```bash
-ollama serve
-```
-
-Then start the bot:
-
-```bash
-npm start
-```
-
-Or use:
-
-```bash
-npm run dev
-npm run check
-npm run memory-process
-```
-
-`npm run memory-process` manually runs the short-term to long-term memory processor.
-
-## Memory System
-
-Fabrexa uses a two-layer local memory pipeline:
-
-- `memory-short-term.json` stores temporary memory candidates from chat.
-- `memory-long-term.json` stores stable memories used in model prompts.
-
-Short-term memories include expiry dates and statuses such as `active`, `promoted`, `expired`, and `archived`. The memory processor runs automatically at midnight while the bot is running, and can also be triggered manually with `npm run memory-process`.
-
-Only active long-term memories are included in the model prompt. Short-term memories are processor input and are not sent to the model on every message.
-
-## Telegram Commands
-
-| Command  | Description |
-| -------- | ----------- |
-| `/start` | Start Fabrexa and show the local model |
-
-The bot also provides reply-keyboard buttons for new chats, personality changes, and memory viewing.
+5. **Start the bot**
+    ```bash
+    npm start
+    ```
 
 ## Configuration
 
-- `TELEGRAM_BOT_TOKEN` - required Telegram bot token
-- `OWNER_ID` - required Telegram user ID allowed to use the bot
-- `OLLAMA_BASE_URL` - local Ollama server URL
-- `OLLAMA_MODEL` - main chat model
-- `OLLAMA_ANALYZER_MODEL` - optional model for memory analysis
-- `LOG_MODE` - use `normal` for clean logs or `dev-mode` for Ollama payload and timing logs
-- `REQUEST_TIMEOUT` - request timeout in milliseconds
-- `TELEGRAM_STREAM_EDIT_INTERVAL_MS` - minimum delay between streamed Telegram message edits, default `6000`
-- `MEMORY_PROCESSOR_CRON` - cron expression for automatic memory processing, default `0 0 * * *`
-- `MEMORY_PROCESSOR_TIMEZONE` - timezone for the memory cron job, default `Asia/Tehran`
-- `OLLAMA_KEEP_ALIVE` - Ollama model keep-alive value
-- `OLLAMA_NUM_CTX` - context window
-- `OLLAMA_TEMPERATURE` - response creativity
-- `OLLAMA_TOP_P` - nucleus sampling
-- `OLLAMA_MAX_TOKENS` - response token limit
+See [.env.example](./.env.example) for all available options. Key settings:
+
+- `TELEGRAM_BOT_TOKEN`: Your Telegram bot token
+- `OWNER_ID`: Your Telegram user ID (required for private mode)
+- `OLLAMA_MODEL`: Model name (default: gemma3:12b)
+- `BOT_PRIVATE`: true for owner-only, false for public
 
 ## Project Structure
 
-```text
-Fabrexa-AI/
-├── bot.js
-├── check-setup.js
-├── src/
-│   ├── ai/
-│   ├── bot/
-│   ├── config/
-│   ├── memory/
-│   └── personalities/
-├── personalities/
-├── chat_memory/
-└── .env.example
+```
+src/
+├── ai/              # Ollama client and configuration
+├── bot/             # Telegram bot handlers and middleware
+├── config/          # Environment and runtime configuration
+├── memory/          # Conversation memory and analysis
+└── personalities/   # Personality definitions and management
+
+chat_memory/        # Persistent user conversations
+personalities/      # Custom personality definitions (.txt files)
 ```
 
-## Troubleshooting
+## Documentation
 
-- If the bot does not start, run `npm run check`
-- If responses fail, run `ollama serve`
-- If the model is missing, run `ollama pull your_model_name`
-- If Telegram rejects the bot token, check `TELEGRAM_BOT_TOKEN`
-- If the bot ignores you, check `OWNER_ID`
+Complete documentation is available in the [`docs/`](./docs/) folder:
+
+- **[Installation Guide](./docs/INSTALLATION.md)** - Step-by-step setup instructions
+- **[Configuration Guide](./docs/CONFIGURATION.md)** - All environment variables and settings
+- **[Features & Usage](./docs/FEATURES.md)** - Bot capabilities and how to use them
+- **[Development Guide](./docs/DEVELOPMENT.md)** - Development workflow and contributing
+- **[Architecture](./docs/ARCHITECTURE.md)** - System design and technical reference
+- **[Troubleshooting](./docs/TROUBLESHOOTING.md)** - Solutions for common issues
+
+**New to the project?** Start with [Quick Start Guide](./QUICK_START.md) (5 minutes) or [Complete Documentation Index](./docs/DOCUMENTATION.md) for all guides.
+
+## Quick Links
+
+| Purpose             | File                                                 |
+| ------------------- | ---------------------------------------------------- |
+| 🚀 Get running fast | [QUICK_START.md](./QUICK_START.md)                   |
+| 📖 Setup details    | [docs/INSTALLATION.md](./docs/INSTALLATION.md)       |
+| ⚙️ All settings     | [docs/CONFIGURATION.md](./docs/CONFIGURATION.md)     |
+| ✨ Features         | [docs/FEATURES.md](./docs/FEATURES.md)               |
+| 🧠 Architecture     | [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)       |
+| 🐛 Troubleshooting  | [docs/TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md) |
+| 🤝 Contributing     | [CONTRIBUTING.md](./CONTRIBUTING.md)                 |
+| 📚 All docs         | [docs/](./docs/)                                     |
+
+## Technology Stack
+
+- **Runtime**: Node.js
+- **Telegram**: Telegraf (v4.16.0)
+- **AI**: Ollama (local models)
+- **Task Scheduling**: node-cron
+- **HTTP Client**: axios
+- **Linting**: ESLint
+
+## Available Commands
+
+| Command                  | Purpose                        |
+| ------------------------ | ------------------------------ |
+| `npm start`              | Production mode                |
+| `npm run dev`            | Development mode with env file |
+| `npm run check`          | Verify environment setup       |
+| `npm run lint`           | Code quality check             |
+| `npm run memory-process` | Manual memory processing       |
+
+## Performance Considerations
+
+- Local model execution means slower responses compared to cloud APIs
+- Adjust `REQUEST_TIMEOUT` based on your hardware (default: 120s)
+- Memory processing happens automatically via scheduled tasks
+- Use `OLLAMA_NUM_CTX` to balance context window vs memory usage
+
+## License
+
+MIT - See [LICENSE](./LICENSE) for details
+
+## Author
+
+Ali Sadeghi
+
+---
+
+**For detailed setup and configuration, refer to the [Installation Guide](./INSTALLATION.md).**
