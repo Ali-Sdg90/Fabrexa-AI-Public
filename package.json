@@ -1,0 +1,36 @@
+{
+    "name": "fabrexa-ai",
+    "version": "3.2.0",
+    "description": "Telegram AI Bot powered by local Ollama models",
+    "main": "bot.js",
+    "type": "module",
+    "scripts": {
+        "start": "node bot.js",
+        "dev": "node --env-file=.env bot.js",
+        "check": "node check-setup.js",
+        "lint": "eslint bot.js \"src/**/*.js\" \"scripts/**/*.js\"",
+        "memory-process": "node scripts/memory-process.js"
+    },
+    "keywords": [
+        "telegram",
+        "bot",
+        "ai",
+        "ollama",
+        "local-ai",
+        "async"
+    ],
+    "author": "Ali Sadeghi",
+    "license": "MIT",
+    "dependencies": {
+        "axios": "^1.7.2",
+        "dotenv": "^16.4.5",
+        "node-cron": "^4.2.1",
+        "telegraf": "^4.16.0"
+    },
+    "devDependencies": {
+        "eslint": "^9.0.0"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}
